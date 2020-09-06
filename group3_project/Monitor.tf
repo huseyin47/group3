@@ -2,12 +2,12 @@
 resource "aws_iam_group_membership" "Monitor" {
   name = "Monitor"
   users = [
-    "aws_iam_user.Monitor1.name",
-    "aws_iam_user.Monitor2.name",
-    "aws_iam_user.Monitor3.name",
-    "aws_iam_user.Monitor4.name",
+    aws_iam_user.Monitor1.name,
+    aws_iam_user.Monitor2.name,
+    aws_iam_user.Monitor3.name,
+    aws_iam_user.Monitor4.name,
   ]
-  group = "aws_iam_group.Monitor.name"
+  group = aws_iam_group.Monitor.name
 }
 resource "aws_iam_group" "Monitor" {
   name = "Monitor"
@@ -27,7 +27,7 @@ resource "aws_iam_user" "Monitor4" {
 
 resource "aws_iam_group_policy" "Monitor_policy" {
   name  = "Monitor_policy"
-  group = "aws_iam_group.Monitor.id"
+  group = aws_iam_group.Monitor.id
   policy = <<EOF
 {
     "Version": "2012-10-17",

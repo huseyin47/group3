@@ -2,10 +2,10 @@
 resource "aws_iam_group_membership" "DBAdmin" {
   name = "DBAdmin"
   users = [
-    "aws_iam_user.DBAdmin1.name",
-    "aws_iam_user.DBAdmin2.name",
+    aws_iam_user.DBAdmin1.name,
+    aws_iam_user.DBAdmin2.name,
   ]
-  group = "aws_iam_group.DBAdmin.name"
+  group = aws_iam_group.DBAdmin.name
 }
 resource "aws_iam_group" "DBAdmin" {
   name = "DBAdmin"
@@ -27,7 +27,7 @@ resource "aws_iam_account_password_policy" "strict" {
 }
 resource "aws_iam_group_policy" "DBAdmin_policy" {
   name  = "DBAdmin_policy"
-  group = "aws_iam_group.DBAdmin.id"
+  group = aws_iam_group.DBAdmin.id
   policy = <<EOF
 {
     "Version": "2012-10-17",
