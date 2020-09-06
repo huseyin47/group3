@@ -1,0 +1,53 @@
+#---RDS Instances---
+
+# resource "aws_db_instance" "group3_primary_db" {
+#   allocated_storage       = 10
+#   storage_type            = "gp2"
+#   engine                  = "mysql"
+#   engine_version          = "5.7"
+#   instance_class          = var.db_instance_class
+#   name                    = var.db_name
+#   username                = var.db_user
+#   password                = var.db_password
+#   db_subnet_group_name    = aws_db_subnet_group.group3_rds_subnetgroup.name
+#   vpc_security_group_ids  = [aws_security_group.group3_rds_sg.id]
+#   skip_final_snapshot     = true
+#   availability_zone       = data.aws_availability_zones.available.names[0]
+#   apply_immediately       = false
+#   backup_retention_period = var.db_bak_retention
+#   deletion_protection     = false  #Change to yes
+#   publicly_accessible     = false
+
+# }
+
+
+
+# resource "aws_db_instance" "group3_replica_db" {
+
+#   instance_class         = var.db_instance_class
+#   vpc_security_group_ids = [aws_security_group.group3_rds_sg.id]
+#   availability_zone      = data.aws_availability_zones.available.names[1]
+
+#   replicate_source_db = aws_db_instance.group3_primary_db.id
+# }
+
+#RDS Security Group
+resource "aws_security_group" "group3_rds_sg" {
+  name        = "group3_rds_sg"
+  description = "Used for RDS instances"
+  vpc_id      = aws_vpc.group3_vpc.id
+
+  #SQL access from public and private SGs
+  ingress {
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = "tcp"
+    security_groups = [aws_security_group.group3_web_sg.id, aws_security_group.group3_app_sg.id]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
